@@ -74,23 +74,23 @@ gameField.coordinatesCell();
 
 
 class Snake extends GameField {
-    constructor(field, cell, x, y, posX, posY, coordinates, snakeBody) {
+    constructor(field, cell, x, y, posX, posY, coordinates, snakeBody, direction, steps, snakeCoordinates, interval) {
         super(field, cell, x, y)
         this.posX = posX;
         this.posY = posY;
         this.coordinates = coordinates;
         this.snakeBody = snakeBody;
-        //инициализация змейки
-        //размер змейки, цвет
-        //начальное позиционирование и другие параметры
+        this.direction = direction;
+        this.steps = steps;
+        this.snakeCoordinates = snakeCoordinates;
+        this.interval = interval;
+        
     }
 
     getPosition() {
         this.posX = Math.round(Math.random() * (10 - 3) + 3);   //минимальное значение устанавливае 3, что бы не было возврата 
         this.posY = Math.round(Math.random() * (10 - 1) + 1);
         this.coordinates = [this.posX, this.posY];
-        //console.log(this.coordinates);
-        //получение новой позиции змеи на поле
     }
 
     death() {
@@ -104,8 +104,6 @@ class Snake extends GameField {
 
     drow() {
         
-        console.log(this.snakeBody);
-
         this.snakeBody = [document.querySelector('[posX = "' + this.coordinates[0] + '"][posY = "' + this.coordinates[1] + '"]'),document.querySelector('[posX = "' + (this.coordinates[0]-1) + '"][posY = "' + this.coordinates[1] + '"]'),document.querySelector('[posX = "' + (this.coordinates[0]-2) + '"][posY = "' + this.coordinates[1] + '"]')];  //присвоили рэндомные координаты змее и + 2 ячейки рядом(тело)
         
         for ( let i = 0; i < this.snakeBody.length; i++){  //добавляем всему телу змеи class отрисовки тела
@@ -117,30 +115,124 @@ class Snake extends GameField {
     }
 
     control() {
-        //логика управления змейкой
-        //обработка кнопок на клаве
+        this.steps = true;
+
+        window.addEventListener('keydown', function(e){ //вешаем обработчик на кнопки
+            if(this.steps == true){
+                if(e.keyCode == 37 && this.direction != 'right') {      //37 код стрелки влево //.... если движ не в право, то можно влево
+                    this.direction = 'left';
+                    this.steps = false; 
+                    console.log(true);
+                }
+                else if(e.keyCode == 38 && this.direction != 'down') {    //38 код стрелки вверх //....
+                    this.direction = 'up';  
+                    this.steps = false; 
+                    console.log(true);
+                }
+                else if(e.keyCode == 39 && this.direction != 'left') {    //39 код стрелки в право //....
+                    this.direction = 'right';
+                    this.steps = false;
+                    console.log(true);
+                }
+                else if(e.keyCode == 40 && this.direction != 'up') {    //40 код стрелки вниз //.....
+                    this.direction = 'down';
+                    this.steps = false;
+                    console.log(true);
+                }
+            }
+                
+            });
     }
+
+    move() {
+        // this.snakeCoordinates = [this.snakeBody[0].getAttribute('posX'), this.snakeBody[0].getAttribute('posY')]; //в переменную получаем координаты головы 
+        // console.log(this.snakeCoordinates)
+        // this.snakeBody[0].classList.remove('snakeHead'); // у головы удаляем class головы
+        // console.log(this.snakeBody[0])
+        // this.snakeBody[this.snakeBody.length - 1].classList.remove('snakeBody');  //удаляем class у хвоста
+        // console.log(this.snakeBody[this.snakeBody.length - 1])
+        // this.snakeBody.pop(); // удаляем последний элемент из массива
+        // console.log(this.snakeBody)
+        
+        if (this.direction == 'right') { // движение и проход через границу поля 
+        if (this.snakeCoordinates[0] < 10){ //условие что бы змейка находилась по оси в поле
+             this.snakeBody.unshift(document.querySelector('[posX = "' + (+this.snakeCoordinates[0] + 1) + '"][posY = "' + this.snakeCoordinates[1] + '"]'));  //добавляем ячейку X,Y и в неё class snakeHead
+             console.log(this.snakeBody)
+         }else {
+             this.snakeBody.unshift(document.querySelector('[posX = "1"][posY = "' + this.snakeCoordinates[1] + '"]'));  //добавляем ячейку X,Y в начале поля в неё class snakeHead
+    
+        }
+    
+    }else if (this.direction == 'left') { // движение и проход через границу поля 
+         if (this.snakeCoordinates[0] > 1){  //условие что бы змейка находилась по оси в поле
+            this.snakeBody.unshift(document.querySelector('[posX = "' + (+this.snakeCoordinates[0] - 1) + '"][posY = "' + this.snakeCoordinates[1] + '"]'));  //добавляем ячейку X,Y и в неё class snakeHead
+        }else {
+            this.snakeBody.unshift(document.querySelector('[posX = "10"][posY = "' + this.snakeCoordinates[1] + '"]'));  //добавляем ячейку X,Y в конце поля в неё class snakeHead
+        }
+      
+    }else if (this.direction == 'up') {  // движение и проход через границу поля 
+        if (this.snakeCoordinates[1] < 10){  //условие что бы змейка находилась по оси в поле
+            this.snakeBody.unshift(document.querySelector('[posX = "' + this.snakeCoordinates[0] + '"][posY = "' + (+this.snakeCoordinates[1]+1) + '"]'));  //добавляем ячейку X,Y и в неё class snakeHead
+        }else {
+            this.snakeBody.unshift(document.querySelector('[posX = "' + this.snakeCoordinates[0] + '"][posY = "1"]'));  //добавляем ячейку X,Y в конце поля в неё class snakeHead
+        }
+      
+    }else if (this.direction == 'down') {   // движение и проход через границу поля 
+        if (this.snakeCoordinates[1] > 1){ //условие что бы змейка находилась по оси в поле
+            this.snakeBody.unshift(document.querySelector('[posX = "' + snakeCoordinates[0] + '"][posY = "' + (+this.snakeCoordinates[1]-1) + '"]'));  //добавляем ячейку X,Y и в неё class snakeHead
+        }else {
+            this.snakeBody.unshift(document.querySelector('[posX = "' + this.snakeCoordinates[0] + '"][posY = "10"]')); //добавляем ячейку X,Y в конце поля в неё class snakeHead
+        }
+
+      this.snakeBody[0].classList.add('snakeHead'); // возвращаем глову при движении (строки 85 - 120)
+     for ( let i = 0; i < this.snakeBody.length; i++){  
+     this.snakeBody[i].classList.add('snakeBody'); //возвращаем тело при движении (строки 85 - 120)
+    } 
+    }
+    
+}  
+   init() {
+    setInterval(() => {
+        this.move();
+     }, 300);
+   }
 }
+
+
 let snake = new Snake();
 snake.getPosition();
 snake.drow();
+snake.move();
+snake.init();
 
 
-class Apple {
-    constructor() {
-        //инициализация параметров
-        //например цвет, размер, начальные координаты
+class Apple extends GameField {
+    constructor(field, cell, x, y, appleCoordinates, apple) {
+        super(field, cell, x, y)
+        this.appleCoordinates = appleCoordinates;
+        this.apple = apple;
     }
 
     drow() {
-        //отрисовка яблока
+        this.apple = document.querySelector('[posX = "' + this.appleCoordinates[0] + '"][posY = "' + this.appleCoordinates[1] + '"]');
+        this.apple.classList.add('apple');   //присваиваем координаты яблоку и class отрисовки
+
+    while (this.apple.classList.contains('snakeBody')){  //цикл - пока яблоко находиться по вверх змеи, выполняем тело цикла 
+    this.appleCoordinates = generateApple();  //(заново рэндомим появленеи яблока)
+    this.apple = document.querySelector('[posX = "' + this.appleCoordinates[0] + '"][posY = "' + this.appleCoordinates[1] + '"]');  
+}
     }
 
     getPosition() {
-        //получение новой позиции яблока на поле
+        this.posX = Math.round(Math.random() * (10 - 1) + 1);   
+        this.posY = Math.round(Math.random() * (10 - 1) + 1);
+        this.appleCoordinates = [this.posX, this.posY];
     }
 }
 
+let apple = new Apple();
+apple.getPosition();
+apple.drow();
 
 
 class Score {
