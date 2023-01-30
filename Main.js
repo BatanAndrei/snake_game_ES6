@@ -28,13 +28,14 @@ class Main {
 
 
 class GameField {
-    constructor(field, cell, x, y, input, score) {
+    constructor(field, cell, x, y, inputSc, inputRec, score) {
         //отрисовкак игрового поля
      this.field = field;
      this.cell = cell;
      this.x = x;
      this.y = y;
-     this.input = input;
+     this.inputSc = inputSc;
+     this.inputRec = inputRec;
      this.score = score;
     }
 
@@ -50,7 +51,6 @@ class GameField {
             this.cell.classList.add('cell');
           }
     }
-
 
     coordinatesCell() {
         this.cell = document.getElementsByClassName('cell');
@@ -70,12 +70,17 @@ class GameField {
 }
 
 drowInput() {
-    this.input = document.createElement('input');
-    document.body.appendChild(this.input);
-    this.input.classList.add('score');
+    this.inputRec = document.createElement('input');
+    document.body.appendChild(this.inputRec);
+    this.inputRec.classList.add('container');
+
+    this.inputSc = document.createElement('input');
+    document.body.appendChild(this.inputSc);
+    this.inputSc.classList.add('score');
 
     this.score = 0;
-    this.input.value = `Ваш счёт: ${this.score}`;
+    this.inputRec.value =`Ваш рекорд: ${this.score}`;
+    this.inputSc.value = `Ваш счёт: ${this.score}`;
 }
 }
 
@@ -119,7 +124,6 @@ apples.drow();
 
 
 
-
 class Snake extends GameField {
     constructor(direction, field, cell, x, y, posX, posY, coordinates, snakeBody, steps, snakeCoordinates, apple, a, b, intervalID, score, input) {
         super(field, cell, x, y, input, score)
@@ -136,7 +140,6 @@ class Snake extends GameField {
         this.intervalID = intervalID;
         this.score = score;
         this.input = input;
-        
     }
 
     getPosition() {
@@ -146,7 +149,6 @@ class Snake extends GameField {
     }
 
     drow() {
-        
         this.snakeBody = [document.querySelector('[posX = "' + this.coordinates[0] + '"][posY = "' + this.coordinates[1] + '"]'),document.querySelector('[posX = "' + (this.coordinates[0]-1) + '"][posY = "' + this.coordinates[1] + '"]'),document.querySelector('[posX = "' + (this.coordinates[0]-2) + '"][posY = "' + this.coordinates[1] + '"]')];  //присвоили рэндомные координаты змее и + 2 ячейки рядом(тело)
         
         for ( let i = 0; i < this.snakeBody.length; i++){  //добавляем всему телу змеи class отрисовки тела
@@ -157,7 +159,6 @@ class Snake extends GameField {
     }
 
     controle() {
-       
         window.addEventListener('keydown', function(e){ //вешаем обработчик на кнопки
             //if(this.steps == true){
             if(e.key === 'ArrowLeft' && snake.direction !== 'right') {      //37 код стрелки влево //.... если движ не в право, то можно влево
@@ -184,7 +185,6 @@ class Snake extends GameField {
         }
 
     move() {
-        
         this.snakeCoordinates = [this.snakeBody[0].getAttribute('posX'), this.snakeBody[0].getAttribute('posY')]; //в переменную получаем координаты головы 
         this.snakeBody[0].classList.remove('snakeHead'); // у головы удаляем class головы
         this.snakeBody[this.snakeBody.length - 1].classList.remove('snakeBody');  //удаляем class у хвоста
@@ -241,8 +241,8 @@ class Snake extends GameField {
     this.snakeBody.push(document.querySelector('[posX = "' + this.a + '"][posY ="' + this.b +'"]')); //пушим и увеличиваем змею
 
     gameField.score++;
-    gameField.input.value = `Ваш счёт: ${gameField.score}`;
-   
+    gameField.inputRec.value = `Ваш рекорд: ${gameField.score}`;
+    gameField.inputSc.value = `Ваш счёт: ${gameField.score}`;
    }
 
   if(this.snakeBody[0].classList.contains('snakeBody')){ //проверка на содержание class (врезаемся в себя)
@@ -258,6 +258,7 @@ class Snake extends GameField {
     this.snakeBody[i].classList.add('snakeBody'); //возвращаем тело при движении (строки 85 - 120)
    } 
     }
+    
    initInterval() {
     this.intervalID = setInterval(() => {
         this.move();
