@@ -47,7 +47,6 @@ class GameField {
             this.field.appendChild(this.cell);
             this.cell.classList.add('cell');
           }
-       
     }
 
 
@@ -66,9 +65,9 @@ class GameField {
         this.cell[i].setAttribute('posY', this.y);      //присвоили систему координат ячейкам
         this.x++;
     }
+}
+}
 
-}
-}
 let gameField = new GameField();
 gameField.drowField();
 gameField.coordinatesCell();
@@ -83,33 +82,24 @@ class Apple extends GameField {
         this.snakeBody = snakeBody;
         this.a = a;
         this.b = b;
-    }
+}
 
     drow() {
         this.apple = document.querySelector('[posX = "' + this.appleCoordinates[0] + '"][posY = "' + this.appleCoordinates[1] + '"]');
         this.apple.classList.add('apple');   //присваиваем координаты яблоку и class отрисовки
 
-    while (this.apple.classList.contains('snakeBody')){  //цикл - пока яблоко находиться по вверх змеи, выполняем тело цикла 
+        while (this.apple.classList.contains('snakeBody')){  //цикл - пока яблоко находиться по вверх змеи, выполняем тело цикла 
     
-    this.apple = document.querySelector('[posX = "' + this.appleCoordinates[0] + '"][posY = "' + this.appleCoordinates[1] + '"]');  
-
-}
+        this.apple = document.querySelector('[posX = "' + this.appleCoordinates[0] + '"][posY = "' + this.appleCoordinates[1] + '"]');  
     }
+}
 
     getPosition() {
         this.posX = Math.round(Math.random() * (10 - 1) + 1);   
         this.posY = Math.round(Math.random() * (10 - 1) + 1);
         this.appleCoordinates = [this.posX, this.posY];
-      
-        //console.log('In apple ' +this.appleCoordinates)
     }
-
-    update() {
-
-    }
-
 }
-    
     
 let apples = new Apple();
 apples.getPosition();
@@ -119,7 +109,7 @@ apples.drow();
 
 
 class Snake extends GameField {
-    constructor(direction, field, cell, x, y, posX, posY, coordinates, snakeBody, steps, snakeCoordinates, interval,apple, a, b) {
+    constructor(direction, field, cell, x, y, posX, posY, coordinates, snakeBody, steps, snakeCoordinates, interval,apple, a, b, intervalID) {
         super(field, cell, x, y)
         this.posX = posX;
         this.posY = posY;
@@ -131,9 +121,8 @@ class Snake extends GameField {
         this.interval = interval;
         this.apple = apple;
         this.a = a;
-        this.b = b;
-        
-        
+        this.b = b;  
+        this.intervalID = intervalID;
     }
 
     getPosition() {
@@ -144,6 +133,7 @@ class Snake extends GameField {
 
     death() {
         //логика гибели змейки
+    
     }
 
     update() {
@@ -159,8 +149,7 @@ class Snake extends GameField {
             this.snakeBody[i].classList.add('snakeBody');
         }
         this.snakeBody[0].classList.add('snakeHead');  //добавляем первому элементу тела змеи class отрисовки её головы
-        //логика отрисовки змейки
-        
+        //логика отрисовки змейки  
     }
 
     controle() {
@@ -187,7 +176,6 @@ class Snake extends GameField {
                 snake.steps = false;
                 //console.log(true);
             }
-        
         });
         }
     
@@ -228,12 +216,6 @@ class Snake extends GameField {
          }
      }
     
-    this.snakeBody[0].classList.add('snakeHead'); // возвращаем глову при движении (строки 85 - 120)
-    for ( let i = 0; i < this.snakeBody.length; i++){  
-    this.snakeBody[i].classList.add('snakeBody'); //возвращаем тело при движении (строки 85 - 120)
-   } 
-
-
    if (this.snakeBody[0].getAttribute('posX') == apples.apple.getAttribute('posX') && this.snakeBody[0].getAttribute('posY') == apples.apple. getAttribute('posY')) {     //проверяем соовпадение координат головы и яблока
    
     apples.apple.classList.remove('apple');  //удаляем class apple и яблоко съедается
@@ -243,23 +225,33 @@ class Snake extends GameField {
     this.appleCoordinates = [this.posX, this.posY];
 
     while (apples.apple.classList.contains('snakeBody')){  //цикл - пока яблоко находиться по вверх змеи, выполняем тело цикла 
-        // this.appleCoordinates = generateApple();  //(заново рэндомим появленеи яблока)
+       
         apples.apple = document.querySelector('[posX = "' + this.appleCoordinates[0] + '"][posY = "' + this.appleCoordinates[1] + '"]');  
     }
 
     apples.apple = document.querySelector('[posX = "' + this.appleCoordinates[0] + '"][posY = "' + this.appleCoordinates[1] + '"]');
     apples.apple.classList.add('apple');   //присваиваем координаты яблоку и class отрисовки (яблоко появляется новое)
     
-
     this.a = this.snakeBody[this.snakeBody.length - 1].getAttribute('posX');//в переменные толкаем X (хвост)
     this.b = this.snakeBody[this.snakeBody.length - 1].getAttribute('posY');//в переменные толкаем Y (хвост)
     this.snakeBody.push(document.querySelector('[posX = "' + this.a + '"][posY ="' + this.b +'"]')); //пушим и увеличиваем змею
-
    }
 
-}  
-   init() {
-    setInterval(() => {
+  if(this.snakeBody[0].classList.contains('snakeBody')){ //проверка на содержание class (врезаемся в себя)
+   setTimeout(() => {   //timer оповещения
+      alert('Игра окончена');
+  },200)
+    clearInterval(this.intervalID); //останавливаем змею
+    this.snakeBody[0].classList.add('dead');
+  }
+
+  this.snakeBody[0].classList.add('snakeHead'); // возвращаем глову при движении (строки 85 - 120)
+    for ( let i = 0; i < this.snakeBody.length; i++){  
+    this.snakeBody[i].classList.add('snakeBody'); //возвращаем тело при движении (строки 85 - 120)
+   } 
+    }
+   initInterval() {
+    this.intervalID = setInterval(() => {
         this.move();
      }, 500);
    }
@@ -270,11 +262,8 @@ let snake = new Snake();
 snake.getPosition();
 snake.drow();
 snake.move();
-snake.init();
+snake.initInterval();
 snake.controle();
-
-
-
 
 
 class Score {
