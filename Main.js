@@ -202,9 +202,9 @@ snake.init();
 snake.controle();
 
 
-class Apple extends Snake {
+class Apple extends GameField {
     constructor(direction, field, cell, x, y, appleCoordinates, apple, posX, posY, coordinates, snakeBody, steps, snakeCoordinates, interval, a, b) {
-        super(direction, field, cell, x, y, posX, posY, coordinates, snakeBody, steps, snakeCoordinates, interval, apple)
+        super(field, cell, x, y)
         this.appleCoordinates = appleCoordinates;
         this.apple = apple;
         this.snakeBody = snakeBody;
@@ -234,9 +234,9 @@ class Apple extends Snake {
 
     update() {
 
-        if (snake.snakeBody[0].getAttribute('posX') == this.apple.getAttribute('posX') && snake.snakeBody[0].getAttribute('posY') == this.apple. getAttribute('posY')) {     //проверяем соовпадение координат головы и яблока
+        // if (snake.snakeBody[0].getAttribute('posX') == this.apple.getAttribute('posX') && snake.snakeBody[0].getAttribute('posY') == this.apple. getAttribute('posY')) {     //проверяем соовпадение координат головы и яблока
 
-            this.apple.classList.remove('apple'); //удаляем яблоко
+        //     this.apple.classList.remove('apple'); //удаляем яблоко
             //apple.drow();
           
             // this.a = snake.snakeBody[snake.snakeBody.length - 1].getAttribute('posX');//в переменные толкаем X (хвост)
@@ -245,22 +245,22 @@ class Apple extends Snake {
             // console.log(this.a);
             // console.log(this.b);
     }
-    console.log(snake.snakeBody[0]);
-    console.log(this.apple);
+    // console.log(snake.snakeBody[0]);
+    // console.log(this.apple);
 
     
 }
     
     //console.log(snake.snakeBody[0].getAttribute('posX'))
     //console.log(this.apple.getAttribute('posX'))
-}
+
 
 
 
 let apples = new Apple();
 apples.getPosition();
 apples.drow();
-apples.update();
+//apples.update();
 
 
 class Score {
