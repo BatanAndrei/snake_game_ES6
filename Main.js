@@ -90,11 +90,10 @@ class Apple extends GameField {
         this.apple.classList.add('apple');   //присваиваем координаты яблоку и class отрисовки
 
     while (this.apple.classList.contains('snakeBody')){  //цикл - пока яблоко находиться по вверх змеи, выполняем тело цикла 
-    //this.appleCoordinates = generateApple();  //(заново рэндомим появленеи яблока)
+    
     this.apple = document.querySelector('[posX = "' + this.appleCoordinates[0] + '"][posY = "' + this.appleCoordinates[1] + '"]');  
 
 }
-         //console.log(this.apple)
     }
 
     getPosition() {
@@ -112,7 +111,6 @@ class Apple extends GameField {
 }
     
     
-
 let apples = new Apple();
 apples.getPosition();
 apples.drow();
@@ -235,22 +233,26 @@ class Snake extends GameField {
     this.snakeBody[i].classList.add('snakeBody'); //возвращаем тело при движении (строки 85 - 120)
    } 
 
+
    if (this.snakeBody[0].getAttribute('posX') == apples.apple.getAttribute('posX') && this.snakeBody[0].getAttribute('posY') == apples.apple. getAttribute('posY')) {     //проверяем соовпадение координат головы и яблока
    
-    apples.apple.classList.remove('apple');
+    apples.apple.classList.remove('apple');  //удаляем class apple и яблоко съедается
 
-    this.posX = Math.round(Math.random() * (10 - 1) + 1);   
+    this.posX = Math.round(Math.random() * (10 - 1) + 1);   //снова определяем координаты рэндомно (в другом месте)
     this.posY = Math.round(Math.random() * (10 - 1) + 1);
     this.appleCoordinates = [this.posX, this.posY];
 
+    //while (){
     this.apple = document.querySelector('[posX = "' + this.appleCoordinates[0] + '"][posY = "' + this.appleCoordinates[1] + '"]');
-    this.apple.classList.add('apple');   //присваиваем координаты яблоку и class отрисовки
-   
-
+    this.apple.classList.add('apple');   //присваиваем координаты яблоку и class отрисовки (яблоко появляется новое)
+    
+    
     this.a = this.snakeBody[this.snakeBody.length - 1].getAttribute('posX');//в переменные толкаем X (хвост)
     this.b = this.snakeBody[this.snakeBody.length - 1].getAttribute('posY');//в переменные толкаем Y (хвост)
     this.snakeBody.push(document.querySelector('[posX = "' + this.a + '"][posY ="' + this.b +'"]')); //пушим и увеличиваем змею
+    //}
    }
+
 }  
    init() {
     setInterval(() => {
