@@ -43,6 +43,14 @@ body {
     transition: 5s;
     }
     
+.container {
+    margin: auto;
+    margin-top: 40px;
+    margin-bottom: 40px;
+    font-size: 20px;
+    display: block;
+} 
+
 .score {
     margin: auto;
     margin-top: 40px;

@@ -28,12 +28,14 @@ class Main {
 
 
 class GameField {
-    constructor(field, cell, x, y) {
+    constructor(field, cell, x, y, input, score) {
         //отрисовкак игрового поля
      this.field = field;
      this.cell = cell;
      this.x = x;
      this.y = y;
+     this.input = input;
+     this.score = score;
     }
 
     drowField() {
@@ -66,11 +68,21 @@ class GameField {
         this.x++;
     }
 }
+
+drowInput() {
+    this.input = document.createElement('input');
+    document.body.appendChild(this.input);
+    this.input.classList.add('score');
+
+    this.score = 0;
+    this.input.value = `Ваш счёт: ${this.score}`;
+}
 }
 
 let gameField = new GameField();
 gameField.drowField();
 gameField.coordinatesCell();
+gameField.drowInput();
 
 
 
@@ -104,13 +116,13 @@ class Apple extends GameField {
 let apples = new Apple();
 apples.getPosition();
 apples.drow();
-//apples.update();
+
 
 
 
 class Snake extends GameField {
-    constructor(direction, field, cell, x, y, posX, posY, coordinates, snakeBody, steps, snakeCoordinates, interval,apple, a, b, intervalID) {
-        super(field, cell, x, y)
+    constructor(direction, field, cell, x, y, posX, posY, coordinates, snakeBody, steps, snakeCoordinates, apple, a, b, intervalID, score, input) {
+        super(field, cell, x, y, input, score)
         this.posX = posX;
         this.posY = posY;
         this.coordinates = coordinates;
@@ -118,27 +130,19 @@ class Snake extends GameField {
         this.direction  = 'right';
         this.steps = true;
         this.snakeCoordinates = snakeCoordinates;
-        this.interval = interval;
         this.apple = apple;
         this.a = a;
         this.b = b;  
         this.intervalID = intervalID;
+        this.score = score;
+        this.input = input;
+        
     }
 
     getPosition() {
         this.posX = Math.round(Math.random() * (10 - 3) + 3);   //минимальное значение устанавливае 3, что бы не было возврата 
         this.posY = Math.round(Math.random() * (10 - 1) + 1);
         this.coordinates = [this.posX, this.posY];
-    }
-
-    death() {
-        //логика гибели змейки
-    
-    }
-
-    update() {
-        //логика обновления змейки
-        //при каких условиях она будет изменяться
     }
 
     drow() {
@@ -178,7 +182,7 @@ class Snake extends GameField {
             }
         });
         }
-    
+
     move() {
         
         this.snakeCoordinates = [this.snakeBody[0].getAttribute('posX'), this.snakeBody[0].getAttribute('posY')]; //в переменную получаем координаты головы 
@@ -235,6 +239,10 @@ class Snake extends GameField {
     this.a = this.snakeBody[this.snakeBody.length - 1].getAttribute('posX');//в переменные толкаем X (хвост)
     this.b = this.snakeBody[this.snakeBody.length - 1].getAttribute('posY');//в переменные толкаем Y (хвост)
     this.snakeBody.push(document.querySelector('[posX = "' + this.a + '"][posY ="' + this.b +'"]')); //пушим и увеличиваем змею
+
+    gameField.score++;
+    gameField.input.value = `Ваш счёт: ${gameField.score}`;
+   
    }
 
   if(this.snakeBody[0].classList.contains('snakeBody')){ //проверка на содержание class (врезаемся в себя)
@@ -245,7 +253,7 @@ class Snake extends GameField {
     this.snakeBody[0].classList.add('dead');
   }
 
-  this.snakeBody[0].classList.add('snakeHead'); // возвращаем глову при движении (строки 85 - 120)
+   this.snakeBody[0].classList.add('snakeHead'); // возвращаем глову при движении (строки 85 - 120)
     for ( let i = 0; i < this.snakeBody.length; i++){  
     this.snakeBody[i].classList.add('snakeBody'); //возвращаем тело при движении (строки 85 - 120)
    } 
@@ -255,8 +263,9 @@ class Snake extends GameField {
         this.move();
      }, 500);
    }
-}
 
+  
+}
 
 let snake = new Snake();
 snake.getPosition();
@@ -266,26 +275,47 @@ snake.initInterval();
 snake.controle();
 
 
-class Score {
-    constructor(score) {
-        //инициализировать начальное количество очков
-        this._score = score;
+
+class Score extends GameField {
+    constructor(input, score) {
+        super(score, input)
+        this.score = score;
+        this.input = input;
+        
     }
 
     drow() {
         //отрисовка блока со счётом
+        // this.inputUp = document.querySelector('record');
+        // this.parentInput = this.inputUp;
+        // this.parentInput.insertBefore(this.inputDown, this.parentInput)
+
+    //    this.inputDown = document.createElement('input');
+    //    document.body.appendChild(this.inputDown);
+    //    this.inputDown.classList.add('score');
+
+    //    this.score = 0;
+       
+    //    this.inputDown.value = `Ваш счёт: ${this.score}`;
     }
 
     increase() {
         //увеличивать количество очков
         //перерисовывать табло
-        this._score += 1; 
-        this.drow();
+        //this.score += 1; 
+        //this.drow();
+    
     }
 
     reset() {
         //сброс очков при гибели
-        this._score = 0;
-        this.drow();
+        this.score = 0;
+        //this.drow();
+        
     }
 }
+
+let scores = new Score();
+scores.drow();
+scores.increase();
+scores.reset();
