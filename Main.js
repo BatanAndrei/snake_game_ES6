@@ -101,6 +101,10 @@ class Snake extends GameField {
     update() {
         //логика обновления змейки
         //при каких условиях она будет изменяться
+        this.posX = Math.round(Math.random() * (10 - 1) + 1);   
+        this.posY = Math.round(Math.random() * (10 - 1) + 1);
+        this.appleCoordinates = [this.posX, this.posY];
+        console.log(this.appleCoordinates)
     }
 
     drow() {
@@ -119,8 +123,6 @@ class Snake extends GameField {
 
     controle() {
        
-        console.log('Это в controle: ' + this.direction);
-
         window.addEventListener('keydown', function(e){ //вешаем обработчик на кнопки
             //if(this.steps == true){
             if(e.key === 'ArrowLeft' && snake.direction !== 'right') {      //37 код стрелки влево //.... если движ не в право, то можно влево
@@ -149,7 +151,6 @@ class Snake extends GameField {
     
     move() {
         
-       console.log('Это в move: ' + this.direction);
         this.snakeCoordinates = [this.snakeBody[0].getAttribute('posX'), this.snakeBody[0].getAttribute('posY')]; //в переменную получаем координаты головы 
         this.snakeBody[0].classList.remove('snakeHead'); // у головы удаляем class головы
         this.snakeBody[this.snakeBody.length - 1].classList.remove('snakeBody');  //удаляем class у хвоста
@@ -204,6 +205,7 @@ snake.drow();
 snake.move();
 snake.init();
 snake.controle();
+snake.update();
 
 
 
