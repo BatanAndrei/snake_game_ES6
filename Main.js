@@ -118,34 +118,33 @@ class Snake extends GameField {
    
 
     controle() {
-        //this.steps = true;
-        //this.direction = 'right';
+       
         console.log('Это в controle: ' + this.direction);
 
-         window.addEventListener('keydown', function(e){ //вешаем обработчик на кнопки
+        window.addEventListener('keydown', function(e){ //вешаем обработчик на кнопки
             //if(this.steps == true){
-                if(e.keyCode == 37 && this.direction != 'right') {      //37 код стрелки влево //.... если движ не в право, то можно влево
-                    this.direction = 'left';
-                    this.steps = false; 
-                    console.log(true);
-                }
-                else if(e.keyCode == 38 && this.direction != 'down') {    //38 код стрелки вверх //....
-                    this.direction = 'up';  
-                    this.steps = false; 
-                    console.log(true);
-                }
-                else if(e.keyCode == 39 && this.direction != 'left') {    //39 код стрелки в право //....
-                    this.direction = 'right';
-                    this.steps = false;
-                    console.log(true);
-                }
-                else if(e.keyCode == 40 && this.direction != 'up') {    //40 код стрелки вниз //.....
-                    this.direction = 'down';
-                    this.steps = false;
-                    console.log(true);
-                }
-                
-            });
+            if(e.key === 'ArrowLeft' && snake.direction !== 'right') {      //37 код стрелки влево //.... если движ не в право, то можно влево
+                snake.direction = 'left';
+                snake.steps = false;
+                console.log(true);
+            }
+            else if(e.key === 'ArrowUp' && snake.direction !== 'down') {    //38 код стрелки вверх //....
+                snake.direction = 'up';
+                snake.steps = false;
+                console.log(true);
+            }
+            else if(e.key === 'ArrowRight' && snake.direction !== 'left') {    //39 код стрелки в право //....
+                snake.direction = 'right';
+                snake.steps = false;
+                console.log(true);
+            }
+            else if(e.key === 'ArrowDown' && snake.direction !== 'up') {    //40 код стрелки вниз //.....
+                snake.direction = 'down';
+                snake.steps = false;
+                console.log(true);
+            }
+        
+        });
         }
     
     move() {
@@ -179,7 +178,7 @@ class Snake extends GameField {
       
      }else if (this.direction == 'down') {   // движение и проход через границу поля 
          if (this.snakeCoordinates[1] > 1){ //условие что бы змейка находилась по оси в поле
-             this.snakeBody.unshift(document.querySelector('[posX = "' + snakeCoordinates[0] + '"][posY = "' + (+this.snakeCoordinates[1]-1) + '"]'));  //добавляем ячейку X,Y и в неё class snakeHead
+             this.snakeBody.unshift(document.querySelector('[posX = "' + this.snakeCoordinates[0] + '"][posY = "' + (+this.snakeCoordinates[1]-1) + '"]'));  //добавляем ячейку X,Y и в неё class snakeHead
              //console.log(this.snakeBody);
          }else {
              this.snakeBody.unshift(document.querySelector('[posX = "' + this.snakeCoordinates[0] + '"][posY = "10"]')); //добавляем ячейку X,Y в конце поля в неё class snakeHead
