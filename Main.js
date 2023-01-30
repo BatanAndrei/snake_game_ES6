@@ -138,7 +138,7 @@ apples.drow();
 
 
 class Snake extends GameField {
-    constructor(direction, field, cell, x, y, posX, posY, coordinates, snakeBody, steps, snakeCoordinates, interval,apple) {
+    constructor(direction, field, cell, x, y, posX, posY, coordinates, snakeBody, steps, snakeCoordinates, interval,apple, a, b) {
         super(field, cell, x, y)
         this.posX = posX;
         this.posY = posY;
@@ -149,6 +149,8 @@ class Snake extends GameField {
         this.snakeCoordinates = snakeCoordinates;
         this.interval = interval;
         this.apple = apple;
+        this.a = a;
+        this.b = b;
         
         
     }
@@ -252,8 +254,11 @@ class Snake extends GameField {
 
    if (this.snakeBody[0].getAttribute('posX') == apples.apple.getAttribute('posX') && this.snakeBody[0].getAttribute('posY') == apples.apple. getAttribute('posY')) {     //проверяем соовпадение координат головы и яблока
    
-
     apples.apple.classList.remove('apple');
+
+    this.a = this.snakeBody[this.snakeBody.length - 1].getAttribute('posX');//в переменные толкаем X (хвост)
+    this.b = this.snakeBody[this.snakeBody.length - 1].getAttribute('posY');//в переменные толкаем Y (хвост)
+    this.snakeBody.push(document.querySelector('[posX = "' + this.a + '"][posY ="' + this.b +'"]')); //пушим и увеличиваем змею
    }
 }  
    init() {
