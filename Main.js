@@ -102,21 +102,6 @@ class Snake extends GameField {
     update() {
         //логика обновления змейки
         //при каких условиях она будет изменяться
-//         this.posX = Math.round(Math.random() * (10 - 1) + 1);   
-//         this.posY = Math.round(Math.random() * (10 - 1) + 1);
-//         this.appleCoordinates = [this.posX, this.posY];
-
-//         this.apple = document.querySelector('[posX = "' + this.appleCoordinates[0] + '"][posY = "' + this.appleCoordinates[1] + '"]');
-//         this.apple.classList.add('apple');   //присваиваем координаты яблоку и class отрисовки
-
-//     while (this.apple.classList.contains('snakeBody')){  //цикл - пока яблоко находиться по вверх змеи, выполняем тело цикла 
-//     //this.appleCoordinates = generateApple();  //(заново рэндомим появленеи яблока)
-//     this.apple = document.querySelector('[posX = "' + this.appleCoordinates[0] + '"][posY = "' + this.appleCoordinates[1] + '"]');  
-// }
-
-//         console.log(this.apple)
-
-
     }
 
     drow() {
@@ -131,8 +116,6 @@ class Snake extends GameField {
         
     }
 
-   
-
     controle() {
        
         window.addEventListener('keydown', function(e){ //вешаем обработчик на кнопки
@@ -140,22 +123,22 @@ class Snake extends GameField {
             if(e.key === 'ArrowLeft' && snake.direction !== 'right') {      //37 код стрелки влево //.... если движ не в право, то можно влево
                 snake.direction = 'left';
                 snake.steps = false;
-                console.log(true);
+                //console.log(true);
             }
             else if(e.key === 'ArrowUp' && snake.direction !== 'down') {    //38 код стрелки вверх //....
                 snake.direction = 'up';
                 snake.steps = false;
-                console.log(true);
+                //console.log(true);
             }
             else if(e.key === 'ArrowRight' && snake.direction !== 'left') {    //39 код стрелки в право //....
                 snake.direction = 'right';
                 snake.steps = false;
-                console.log(true);
+                //console.log(true);
             }
             else if(e.key === 'ArrowDown' && snake.direction !== 'up') {    //40 код стрелки вниз //.....
                 snake.direction = 'down';
                 snake.steps = false;
-                console.log(true);
+                //console.log(true);
             }
         
         });
@@ -217,15 +200,16 @@ snake.drow();
 snake.move();
 snake.init();
 snake.controle();
-snake.update();
 
 
-
-class Apple extends GameField {
-    constructor(field, cell, x, y, appleCoordinates, apple) {
-        super(field, cell, x, y)
+class Apple extends Snake {
+    constructor(direction, field, cell, x, y, appleCoordinates, apple, posX, posY, coordinates, snakeBody, steps, snakeCoordinates, interval, a, b) {
+        super(direction, field, cell, x, y, posX, posY, coordinates, snakeBody, steps, snakeCoordinates, interval, apple)
         this.appleCoordinates = appleCoordinates;
         this.apple = apple;
+        this.snakeBody = snakeBody;
+        this.a = a;
+        this.b = b;
     }
 
     drow() {
@@ -235,7 +219,9 @@ class Apple extends GameField {
     while (this.apple.classList.contains('snakeBody')){  //цикл - пока яблоко находиться по вверх змеи, выполняем тело цикла 
     //this.appleCoordinates = generateApple();  //(заново рэндомим появленеи яблока)
     this.apple = document.querySelector('[posX = "' + this.appleCoordinates[0] + '"][posY = "' + this.appleCoordinates[1] + '"]');  
+
 }
+         //console.log(this.apple)
     }
 
     getPosition() {
@@ -245,11 +231,36 @@ class Apple extends GameField {
       
         //console.log('In apple ' +this.appleCoordinates)
     }
+
+    update() {
+
+        if (snake.snakeBody[0].getAttribute('posX') == this.apple.getAttribute('posX') && snake.snakeBody[0].getAttribute('posY') == this.apple. getAttribute('posY')) {     //проверяем соовпадение координат головы и яблока
+
+            this.apple.classList.remove('apple'); //удаляем яблоко
+            //apple.drow();
+          
+            // this.a = snake.snakeBody[snake.snakeBody.length - 1].getAttribute('posX');//в переменные толкаем X (хвост)
+            // this.b = snake.snakeBody[snake.snakeBody.length - 1].getAttribute('posY');//в переменные толкаем Y (хвост)
+            // snake.snakeBody.push(document.querySelector('[posX = "' + this.a + '"][posY ="' + this.b +'"]')); //пушим и увеличиваем змею
+            // console.log(this.a);
+            // console.log(this.b);
+    }
+    console.log(snake.snakeBody[0]);
+    console.log(this.apple);
+
+    
+}
+    
+    //console.log(snake.snakeBody[0].getAttribute('posX'))
+    //console.log(this.apple.getAttribute('posX'))
 }
 
-let apple = new Apple();
-apple.getPosition();
-apple.drow();
+
+
+let apples = new Apple();
+apples.getPosition();
+apples.drow();
+apples.update();
 
 
 class Score {
