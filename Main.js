@@ -107,28 +107,11 @@ class Apple extends GameField {
 
     update() {
 
-        // if (snake.snakeBody[0].getAttribute('posX') == this.apple.getAttribute('posX') && snake.snakeBody[0].getAttribute('posY') == this.apple. getAttribute('posY')) {     //проверяем соовпадение координат головы и яблока
-
-        //     this.apple.classList.remove('apple'); //удаляем яблоко
-            //apple.drow();
-          
-            // this.a = snake.snakeBody[snake.snakeBody.length - 1].getAttribute('posX');//в переменные толкаем X (хвост)
-            // this.b = snake.snakeBody[snake.snakeBody.length - 1].getAttribute('posY');//в переменные толкаем Y (хвост)
-            // snake.snakeBody.push(document.querySelector('[posX = "' + this.a + '"][posY ="' + this.b +'"]')); //пушим и увеличиваем змею
-            // console.log(this.a);
-            // console.log(this.b);
     }
-    // console.log(snake.snakeBody[0]);
-    // console.log(this.apple);
 
-    
 }
     
-    //console.log(snake.snakeBody[0].getAttribute('posX'))
-    //console.log(this.apple.getAttribute('posX'))
-
-
-
+    
 
 let apples = new Apple();
 apples.getPosition();
@@ -255,6 +238,14 @@ class Snake extends GameField {
    if (this.snakeBody[0].getAttribute('posX') == apples.apple.getAttribute('posX') && this.snakeBody[0].getAttribute('posY') == apples.apple. getAttribute('posY')) {     //проверяем соовпадение координат головы и яблока
    
     apples.apple.classList.remove('apple');
+
+    this.posX = Math.round(Math.random() * (10 - 1) + 1);   
+    this.posY = Math.round(Math.random() * (10 - 1) + 1);
+    this.appleCoordinates = [this.posX, this.posY];
+
+    this.apple = document.querySelector('[posX = "' + this.appleCoordinates[0] + '"][posY = "' + this.appleCoordinates[1] + '"]');
+    this.apple.classList.add('apple');   //присваиваем координаты яблоку и class отрисовки
+   
 
     this.a = this.snakeBody[this.snakeBody.length - 1].getAttribute('posX');//в переменные толкаем X (хвост)
     this.b = this.snakeBody[this.snakeBody.length - 1].getAttribute('posY');//в переменные толкаем Y (хвост)
