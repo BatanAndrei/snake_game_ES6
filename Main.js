@@ -75,8 +75,8 @@ drowInput() {
     document.body.appendChild(this.inputRec);
     this.inputRec.classList.add('container');
 
-    this.scoreRec = 0; // задана точка отсчёта
-    this.scoreRec = localStorage.getItem('record');
+    //this.scoreRec = 0; // задана точка отсчёта
+    localStorage.getItem('record') > 0 ? this.scoreRec = localStorage.getItem('record') : this.scoreRec = 0; 
     this.inputRec.value =`Ваш рекорд: ${this.scoreRec}`; // отрисовка значения поля = 0
     
     this.inputSc = document.createElement('input');
@@ -181,7 +181,6 @@ class Snake extends GameField {
                 snake.direction = 'down';
                 snake.steps = false;
             }
-        
         });
         }
 

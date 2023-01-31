@@ -57,3 +57,13 @@ body {
     font-size: 20px;
     display: block;
     }
+
+    .button {
+        width: 100px;
+        height: 40px;
+        margin: auto;
+        display: block;
+        margin-bottom: 40px;
+        background-color: darkgreen;
+        color: white;
+    }
