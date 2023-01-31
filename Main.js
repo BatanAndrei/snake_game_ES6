@@ -28,7 +28,7 @@ class Main {
 
 
 class GameField {
-    constructor(field, cell, x, y, inputSc, inputRec, score) {
+    constructor(field, cell, x, y, inputSc, inputRec, scoreRec, scoreSc) {
         //отрисовкак игрового поля
      this.field = field;
      this.cell = cell;
@@ -36,7 +36,8 @@ class GameField {
      this.y = y;
      this.inputSc = inputSc;
      this.inputRec = inputRec;
-     this.score = score;
+     this.scoreRec = scoreRec;
+     this.scoreSc =scoreSc
     }
 
     drowField() {
@@ -74,13 +75,16 @@ drowInput() {
     document.body.appendChild(this.inputRec);
     this.inputRec.classList.add('container');
 
+    this.scoreRec = 0; // задана точка отсчёта
+    this.scoreRec = localStorage.getItem('record');
+    this.inputRec.value =`Ваш рекорд: ${this.scoreRec}`; // отрисовка значения поля = 0
+    
     this.inputSc = document.createElement('input');
     document.body.appendChild(this.inputSc);
     this.inputSc.classList.add('score');
 
-    this.score = 0;
-    this.inputRec.value =`Ваш рекорд: ${this.score}`;
-    this.inputSc.value = `Ваш счёт: ${this.score}`;
+    this.scoreSc = 0; // задана точка отсчёта
+    this.inputSc.value = `Ваш счёт: ${this.scoreSc}`; // отрисовка значения поля = 0
 }
 }
 
@@ -160,27 +164,24 @@ class Snake extends GameField {
 
     controle() {
         window.addEventListener('keydown', function(e){ //вешаем обработчик на кнопки
-            //if(this.steps == true){
+            //if(snake.steps == true){
             if(e.key === 'ArrowLeft' && snake.direction !== 'right') {      //37 код стрелки влево //.... если движ не в право, то можно влево
                 snake.direction = 'left';
                 snake.steps = false;
-                //console.log(true);
             }
             else if(e.key === 'ArrowUp' && snake.direction !== 'down') {    //38 код стрелки вверх //....
                 snake.direction = 'up';
                 snake.steps = false;
-                //console.log(true);
             }
             else if(e.key === 'ArrowRight' && snake.direction !== 'left') {    //39 код стрелки в право //....
                 snake.direction = 'right';
                 snake.steps = false;
-                //console.log(true);
             }
             else if(e.key === 'ArrowDown' && snake.direction !== 'up') {    //40 код стрелки вниз //.....
                 snake.direction = 'down';
                 snake.steps = false;
-                //console.log(true);
             }
+        
         });
         }
 
@@ -240,9 +241,13 @@ class Snake extends GameField {
     this.b = this.snakeBody[this.snakeBody.length - 1].getAttribute('posY');//в переменные толкаем Y (хвост)
     this.snakeBody.push(document.querySelector('[posX = "' + this.a + '"][posY ="' + this.b +'"]')); //пушим и увеличиваем змею
 
-    gameField.score++;
-    gameField.inputRec.value = `Ваш рекорд: ${gameField.score}`;
-    gameField.inputSc.value = `Ваш счёт: ${gameField.score}`;
+    gameField.scoreRec++; // увеличение счёта
+    gameField.inputRec.value = `Ваш рекорд: ${gameField.scoreRec}`; // вывод увеличения счёта в input
+    gameField.scoreSc++; // увеличение счёта
+    gameField.inputSc.value = `Ваш счёт: ${gameField.scoreSc}`;  // вывод увеличения счёта в input
+   
+    localStorage.setItem('record', gameField.scoreRec)
+   
    }
 
   if(this.snakeBody[0].classList.contains('snakeBody')){ //проверка на содержание class (врезаемся в себя)
@@ -258,7 +263,7 @@ class Snake extends GameField {
     this.snakeBody[i].classList.add('snakeBody'); //возвращаем тело при движении (строки 85 - 120)
    } 
     }
-    
+
    initInterval() {
     this.intervalID = setInterval(() => {
         this.move();
