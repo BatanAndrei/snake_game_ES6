@@ -44,19 +44,19 @@ class GameField {
 }
 
 drowInput() {
-    this.inputRec = document.createElement('input');
+    this.inputRec = document.createElement('input'); // создали поле рекордов
     document.body.appendChild(this.inputRec);
     this.inputRec.classList.add('container');
 
-    localStorage.getItem('record') > 0 ? this.scoreRec = localStorage.getItem('record') : this.scoreRec = 0; 
+    localStorage.getItem('record') > 0 ? this.scoreRec = localStorage.getItem('record') : this.scoreRec = 0; //определяем значение поля рекордов
 
     this.inputRec.value =`Ваш рекорд: ${this.scoreRec}`; // отрисовка значения поля = 0
     
-    this.inputSc = document.createElement('input');
+    this.inputSc = document.createElement('input'); //создали поле счёта
     document.body.appendChild(this.inputSc);
     this.inputSc.classList.add('score');
 
-    this.scoreSc = 0; // задана точка отсчёта
+    this.scoreSc = 0; //определяем начальное значение поля счёта
     this.inputSc.value = `Ваш счёт: ${this.scoreSc}`; // отрисовка значения поля = 0
 }
 }
@@ -78,20 +78,19 @@ class Apple extends GameField {
         this.b = b;
 }
 
-    getPosition() {
+    getPosition() {                   //получаем рэндомные координаты яблока
          this.posX = Math.round(Math.random() * (10 - 1) + 1);   
          this.posY = Math.round(Math.random() * (10 - 1) + 1);
          this.appleCoordinates = [this.posX, this.posY];
-         console.log(this.appleCoordinates)
 }
 
-    drow() {
+    drow() {    //отрисовываем яблоко
         this.apple = document.querySelector('[posX = "' + this.appleCoordinates[0] + '"][posY = "' + this.appleCoordinates[1] + '"]');
         this.apple.classList.add('apple');   //присваиваем координаты яблоку и class отрисовки
        
         while (this.apple.classList.contains('snakeBody')){  //цикл - пока яблоко находиться по вверх змеи, выполняем тело цикла 
         this.apple = document.querySelector('[posX = "' + this.appleCoordinates[0] + '"][posY = "' + this.appleCoordinates[1] + '"]');  
-        this.apple.classList.add('apple');   //присваиваем координаты яблоку и class отрисовки
+        this.apple.classList.add('apple');   //присваиваем координаты яблоку и class отрисовки в цикле
     }
 }
 }
@@ -120,13 +119,13 @@ class Snake extends GameField {
         this.input = input;
     }
 
-    getPosition() {
-        this.posX = Math.round(Math.random() * (10 - 3) + 3);   //минимальное значение устанавливае 3, что бы не было возврата 
+    getPosition() {  //получаем рэндомные координаты для змеи
+        this.posX = Math.round(Math.random() * (10 - 3) + 3);   //минимальное значение устанавливае 3 по Х, что бы координаты тела змеи попадали в поле
         this.posY = Math.round(Math.random() * (10 - 1) + 1);
-        this.coordinates = [this.posX, this.posY];
+        this.coordinates = [this.posX, this.posY]; 
     }
 
-    drow() {
+    drow() {  //рисуем змею
         this.snakeBody = [document.querySelector('[posX = "' + this.coordinates[0] + '"][posY = "' + this.coordinates[1] + '"]'),document.querySelector('[posX = "' + (this.coordinates[0]-1) + '"][posY = "' + this.coordinates[1] + '"]'),document.querySelector('[posX = "' + (this.coordinates[0]-2) + '"][posY = "' + this.coordinates[1] + '"]')];  //присвоили рэндомные координаты змее и + 2 ячейки рядом(тело)
         
         for ( let i = 0; i < this.snakeBody.length; i++){  //добавляем всему телу змеи class отрисовки тела
@@ -136,7 +135,7 @@ class Snake extends GameField {
         //логика отрисовки змейки  
     }
 
-    controle() {
+    controle() { //управление
         window.addEventListener('keydown', function(e){ //вешаем обработчик на кнопки
             
             if(e.key === 'ArrowLeft' && snake.direction !== 'right') {      //37 код стрелки влево //.... если движ не в право, то можно влево
@@ -154,7 +153,7 @@ class Snake extends GameField {
         });
         }
 
-    move() {
+    move() {  //движение змеи
         this.snakeCoordinates = [this.snakeBody[0].getAttribute('posX'), this.snakeBody[0].getAttribute('posY')]; //в переменную получаем координаты головы 
         this.snakeBody[0].classList.remove('snakeHead'); // у головы удаляем class головы
         this.snakeBody[this.snakeBody.length - 1].classList.remove('snakeBody');  //удаляем class у хвоста
@@ -189,7 +188,7 @@ class Snake extends GameField {
              this.snakeBody.unshift(document.querySelector('[posX = "' + this.snakeCoordinates[0] + '"][posY = "10"]')); //добавляем ячейку X,Y в конце поля в неё class snakeHead
          }
      }
-    
+             //едим яблоко
    if (this.snakeBody[0].getAttribute('posX') == apples.apple.getAttribute('posX') && this.snakeBody[0].getAttribute('posY') == apples.apple. getAttribute('posY')) {     //проверяем соовпадение координат головы и яблока
    
     apples.apple.classList.remove('apple');  //удаляем class apple и яблоко съедается
@@ -205,11 +204,13 @@ class Snake extends GameField {
 
     apples.apple = document.querySelector('[posX = "' + this.appleCoordinates[0] + '"][posY = "' + this.appleCoordinates[1] + '"]');
     apples.apple.classList.add('apple');   //присваиваем координаты яблоку и class отрисовки (яблоко появляется новое)
-    
+     
+           //увеличиваем длину змеи при поглащении яблока
     this.a = this.snakeBody[this.snakeBody.length - 1].getAttribute('posX');//в переменные толкаем X (хвост)
     this.b = this.snakeBody[this.snakeBody.length - 1].getAttribute('posY');//в переменные толкаем Y (хвост)
     this.snakeBody.push(document.querySelector('[posX = "' + this.a + '"][posY ="' + this.b +'"]')); //пушим и увеличиваем змею
 
+       //считаем результат игры и устанавливаем рекорд, записываем в localstorage
     gameField.scoreRec;
     localStorage.getItem('record') > 0 ? gameField.scoreRec = localStorage.getItem('record') : gameField.scoreRec = 0;
     //gameField.scoreRec++; // увеличение счёта
@@ -225,7 +226,8 @@ class Snake extends GameField {
     gameField.inputSc.value = `Ваш счёт: ${gameField.scoreSc}`;  // вывод увеличения счёта в input
    
    }
-
+         
+        //игра окончена, змея натыкается на хвост или саму себя
   if(this.snakeBody[0].classList.contains('snakeBody')){ //проверка на содержание class (врезаемся в себя)
    setTimeout(() => {   //timer оповещения
       alert('Игра окончена');
