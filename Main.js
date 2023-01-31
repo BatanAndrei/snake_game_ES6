@@ -1,35 +1,7 @@
-// import GameField from './GameField.js';
-// import Snake from './Snake.js';
-// import Apple from './Apple.js';
-// import Score from './Score.js';
-
-class Main {
-    constructor() {
-    // this.gameField = new GameField();
-    // this.snake = new Snake();
-    // this.apple = new Apple();
-    // this.score = new Score(0);
-   }
-
-   update() {
-     //логика обновления каких-либо данных
-     //при изменении
-   }
-
-   drow() {
-    //отрисовать все части игры
-   
-   }
-}
-
-
-// export default Main;
-
 
 
 class GameField {
-    constructor(field, cell, x, y, inputSc, inputRec, scoreRec, scoreSc) {
-        //отрисовкак игрового поля
+    constructor(field, cell, x, y, inputSc, inputRec, scoreRec, scoreSc, button) {
      this.field = field;
      this.cell = cell;
      this.x = x;
@@ -37,7 +9,8 @@ class GameField {
      this.inputSc = inputSc;
      this.inputRec = inputRec;
      this.scoreRec = scoreRec;
-     this.scoreSc =scoreSc
+     this.scoreSc = scoreSc
+     this.button = button;
     }
 
     drowField() {
@@ -75,8 +48,8 @@ drowInput() {
     document.body.appendChild(this.inputRec);
     this.inputRec.classList.add('container');
 
-    //this.scoreRec = 0; // задана точка отсчёта
     localStorage.getItem('record') > 0 ? this.scoreRec = localStorage.getItem('record') : this.scoreRec = 0; 
+
     this.inputRec.value =`Ваш рекорд: ${this.scoreRec}`; // отрисовка значения поля = 0
     
     this.inputSc = document.createElement('input');
@@ -96,7 +69,7 @@ gameField.drowInput();
 
 
 class Apple extends GameField {
-    constructor(direction, field, cell, x, y, appleCoordinates, apple, posX, posY, coordinates, snakeBody, steps, snakeCoordinates, interval, a, b) {
+    constructor(field, cell, x, y, appleCoordinates, apple, snakeBody, a, b) {
         super(field, cell, x, y)
         this.appleCoordinates = appleCoordinates;
         this.apple = apple;
@@ -129,20 +102,20 @@ apples.drow();
 
 
 class Snake extends GameField {
-    constructor(direction, field, cell, x, y, posX, posY, coordinates, snakeBody, steps, snakeCoordinates, apple, a, b, intervalID, score, input) {
-        super(field, cell, x, y, input, score)
+    constructor(direction, field, cell, x, y, posX, posY, coordinates, snakeBody, snakeCoordinates, apple, a, b, intervalID, scoreRec, scoreSc, input) {
+        super(field, cell, x, y, input, scoreRec, scoreSc)
         this.posX = posX;
         this.posY = posY;
         this.coordinates = coordinates;
         this.snakeBody = snakeBody;
         this.direction  = 'right';
-        this.steps = true;
         this.snakeCoordinates = snakeCoordinates;
         this.apple = apple;
         this.a = a;
         this.b = b;  
         this.intervalID = intervalID;
-        this.score = score;
+        this.scoreRec = scoreRec;
+        this.scoreSc = scoreSc;
         this.input = input;
     }
 
@@ -164,22 +137,18 @@ class Snake extends GameField {
 
     controle() {
         window.addEventListener('keydown', function(e){ //вешаем обработчик на кнопки
-            //if(snake.steps == true){
+            
             if(e.key === 'ArrowLeft' && snake.direction !== 'right') {      //37 код стрелки влево //.... если движ не в право, то можно влево
                 snake.direction = 'left';
-                snake.steps = false;
             }
             else if(e.key === 'ArrowUp' && snake.direction !== 'down') {    //38 код стрелки вверх //....
                 snake.direction = 'up';
-                snake.steps = false;
             }
             else if(e.key === 'ArrowRight' && snake.direction !== 'left') {    //39 код стрелки в право //....
                 snake.direction = 'right';
-                snake.steps = false;
             }
             else if(e.key === 'ArrowDown' && snake.direction !== 'up') {    //40 код стрелки вниз //.....
                 snake.direction = 'down';
-                snake.steps = false;
             }
         });
         }
@@ -240,12 +209,19 @@ class Snake extends GameField {
     this.b = this.snakeBody[this.snakeBody.length - 1].getAttribute('posY');//в переменные толкаем Y (хвост)
     this.snakeBody.push(document.querySelector('[posX = "' + this.a + '"][posY ="' + this.b +'"]')); //пушим и увеличиваем змею
 
-    gameField.scoreRec++; // увеличение счёта
-    gameField.inputRec.value = `Ваш рекорд: ${gameField.scoreRec}`; // вывод увеличения счёта в input
+    gameField.scoreRec;
+    localStorage.getItem('record') > 0 ? gameField.scoreRec = localStorage.getItem('record') : gameField.scoreRec = 0;
+    //gameField.scoreRec++; // увеличение счёта
     gameField.scoreSc++; // увеличение счёта
+
+    if (gameField.scoreSc > localStorage.getItem('record')){
+        gameField.scoreRec++;
+        gameField.scoreRec = gameField.scoreSc;
+        localStorage.setItem('record', gameField.scoreRec);
+    }
+
+    gameField.inputRec.value = `Ваш рекорд: ${gameField.scoreRec}`; // вывод увеличения счёта в input
     gameField.inputSc.value = `Ваш счёт: ${gameField.scoreSc}`;  // вывод увеличения счёта в input
-   
-    localStorage.setItem('record', gameField.scoreRec)
    
    }
 
@@ -268,8 +244,6 @@ class Snake extends GameField {
         this.move();
      }, 500);
    }
-
-  
 }
 
 let snake = new Snake();
@@ -281,46 +255,3 @@ snake.controle();
 
 
 
-class Score extends GameField {
-    constructor(input, score) {
-        super(score, input)
-        this.score = score;
-        this.input = input;
-        
-    }
-
-    drow() {
-        //отрисовка блока со счётом
-        // this.inputUp = document.querySelector('record');
-        // this.parentInput = this.inputUp;
-        // this.parentInput.insertBefore(this.inputDown, this.parentInput)
-
-    //    this.inputDown = document.createElement('input');
-    //    document.body.appendChild(this.inputDown);
-    //    this.inputDown.classList.add('score');
-
-    //    this.score = 0;
-       
-    //    this.inputDown.value = `Ваш счёт: ${this.score}`;
-    }
-
-    increase() {
-        //увеличивать количество очков
-        //перерисовывать табло
-        //this.score += 1; 
-        //this.drow();
-    
-    }
-
-    reset() {
-        //сброс очков при гибели
-        this.score = 0;
-        //this.drow();
-        
-    }
-}
-
-let scores = new Score();
-scores.drow();
-scores.increase();
-scores.reset();
