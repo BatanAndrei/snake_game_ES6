@@ -4,6 +4,9 @@
 
 body {
     margin: 100px;
+    display: flex;
+    flex-wrap: wrap;
+    width: 1200px;
 }
 
 .field {
@@ -49,6 +52,7 @@ body {
     margin-bottom: 40px;
     font-size: 20px;
     display: block;
+    height: 30px;
 } 
 
 .score {
@@ -58,14 +62,16 @@ body {
     display: block;
     }
 
-    .button {
-        width: 100px;
-        height: 40px;
-        margin: auto;
-        display: block;
-        margin-bottom: 40px;
-        background-color: darkgreen;
-        color: white;
+.button {
+    position: relative;
+    bottom: 390px;
+    width: 100px;
+    height: 40px;
+    margin: auto;
+    display: block;
+    margin-bottom: 40px;
+    background-color: darkgreen;
+    color: white;
     }
 
     

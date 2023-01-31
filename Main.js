@@ -78,21 +78,22 @@ class Apple extends GameField {
         this.b = b;
 }
 
+    getPosition() {
+         this.posX = Math.round(Math.random() * (10 - 1) + 1);   
+         this.posY = Math.round(Math.random() * (10 - 1) + 1);
+         this.appleCoordinates = [this.posX, this.posY];
+         console.log(this.appleCoordinates)
+}
+
     drow() {
         this.apple = document.querySelector('[posX = "' + this.appleCoordinates[0] + '"][posY = "' + this.appleCoordinates[1] + '"]');
         this.apple.classList.add('apple');   //присваиваем координаты яблоку и class отрисовки
-
+       
         while (this.apple.classList.contains('snakeBody')){  //цикл - пока яблоко находиться по вверх змеи, выполняем тело цикла 
-    
         this.apple = document.querySelector('[posX = "' + this.appleCoordinates[0] + '"][posY = "' + this.appleCoordinates[1] + '"]');  
+        this.apple.classList.add('apple');   //присваиваем координаты яблоку и class отрисовки
     }
 }
-
-    getPosition() {
-        this.posX = Math.round(Math.random() * (10 - 1) + 1);   
-        this.posY = Math.round(Math.random() * (10 - 1) + 1);
-        this.appleCoordinates = [this.posX, this.posY];
-    }
 }
     
 let apples = new Apple();
@@ -249,7 +250,7 @@ class Snake extends GameField {
 let snake = new Snake();
 snake.getPosition();
 snake.drow();
-snake.move();
+//snake.move();
 snake.initInterval();
 snake.controle();
 
