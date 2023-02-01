@@ -1,16 +1,16 @@
 
 
 class GameField {
-    constructor(field, cell, x, y, inputSc, inputRec, scoreRec, scoreSc, button) {
+    _scoreSc = 0;
+    
+    constructor(x, y, field, cell, inputSc, inputRec, _scoreRec) {
      this.field = field;
      this.cell = cell;
      this.x = x;
      this.y = y;
      this.inputSc = inputSc;
      this.inputRec = inputRec;
-     this.scoreRec = scoreRec;
-     this.scoreSc = scoreSc
-     this.button = button;
+     this._scoreRec = _scoreRec;
     }
 
     drowField() {
@@ -43,28 +43,29 @@ class GameField {
     }
 }
 
-drowInput() {
-    this.inputRec = document.createElement('input'); // создали поле рекордов
-    document.body.appendChild(this.inputRec);
-    this.inputRec.classList.add('container');
-
-    localStorage.getItem('record') > 0 ? this.scoreRec = localStorage.getItem('record') : this.scoreRec = 0; //определяем значение поля рекордов
-
-    this.inputRec.value =`Ваш рекорд: ${this.scoreRec}`; // отрисовка значения поля = 0
-    
+drowInputScore(value) {
     this.inputSc = document.createElement('input'); //создали поле счёта
     document.body.appendChild(this.inputSc);
     this.inputSc.classList.add('score');
 
-    this.scoreSc = 0; //определяем начальное значение поля счёта
-    this.inputSc.value = `Ваш счёт: ${this.scoreSc}`; // отрисовка значения поля = 0
+    if (value > 0) throw new Error (alert('Начальное значение счёта игры должно быть - 0. Установите значение - 0' ))
+    this._scoreSc = value; //определяем начальное значение поля счёта
+    this.inputSc.value = `Ваш счёт: ${this._scoreSc}`; // отрисовка значения поля = 0
+
+    this.inputRec = document.createElement('input'); // создали поле рекордов
+    document.body.appendChild(this.inputRec);
+    this.inputRec.classList.add('container');
+
+    localStorage.getItem('record') > 0 ? this._scoreRec = localStorage.getItem('record') : this._scoreRec = 0; //определяем значение поля рекордов
+
+    this.inputRec.value =`Ваш рекорд: ${this._scoreRec}`; // отрисовка значения поля = 0
 }
 }
 
 let gameField = new GameField();
 gameField.drowField();
 gameField.coordinatesCell();
-gameField.drowInput();
+gameField.drowInputScore(0);
 
 
 
@@ -102,21 +103,20 @@ apples.drow();
 
 
 class Snake extends GameField {
-    constructor(direction, field, cell, x, y, posX, posY, coordinates, snakeBody, snakeCoordinates, apple, a, b, intervalID, scoreRec, scoreSc, input) {
-        super(field, cell, x, y, input, scoreRec, scoreSc)
+    constructor(direction, field, cell, x, y, posX, posY, coordinates, snakeBody, snakeCoordinates, apple, a, b, intervalID, _scoreRec, _scoreSc) {
+        super(field, cell, x, y, _scoreRec, _scoreSc)
         this.posX = posX;
         this.posY = posY;
         this.coordinates = coordinates;
         this.snakeBody = snakeBody;
-        this.direction  = 'right';
+        this.direction  = direction;
         this.snakeCoordinates = snakeCoordinates;
         this.apple = apple;
         this.a = a;
         this.b = b;  
         this.intervalID = intervalID;
-        this.scoreRec = scoreRec;
-        this.scoreSc = scoreSc;
-        this.input = input;
+        this._scoreRec = _scoreRec;
+        this._scoreSc = _scoreSc;
     }
 
     getPosition() {  //получаем рэндомные координаты для змеи
@@ -136,6 +136,8 @@ class Snake extends GameField {
     }
 
     controle() { //управление
+        this.direction;
+
         window.addEventListener('keydown', function(e){ //вешаем обработчик на кнопки
             
             if(e.key === 'ArrowLeft' && snake.direction !== 'right') {      //37 код стрелки влево //.... если движ не в право, то можно влево
@@ -167,14 +169,14 @@ class Snake extends GameField {
          }
         
     }else if (this.direction == 'left') { // движение и проход через границу поля 
-         if (this.snakeCoordinates[0] > 1){  //условие что бы змейка находилась по оси в поле
+        if (this.snakeCoordinates[0] > 1){  //условие что бы змейка находилась по оси в поле
              this.snakeBody.unshift(document.querySelector('[posX = "' + (+this.snakeCoordinates[0] - 1) + '"][posY = "' + this.snakeCoordinates[1] + '"]'));  //добавляем ячейку X,Y и в неё class snakeHead
          }else {
              this.snakeBody.unshift(document.querySelector('[posX = "10"][posY = "' + this.snakeCoordinates[1] + '"]'));  //добавляем ячейку X,Y в конце поля в неё class snakeHead
          }
         
      }else if (this.direction == 'up') {  // движение и проход через границу поля 
-        if (this.snakeCoordinates[1] < 10){  //условие что бы змейка находилась по оси в поле
+       if (this.snakeCoordinates[1] < 10){  //условие что бы змейка находилась по оси в поле
             this.snakeBody.unshift(document.querySelector('[posX = "' + this.snakeCoordinates[0] + '"][posY = "' + (+this.snakeCoordinates[1]+1) + '"]'));  //добавляем ячейку X,Y и в неё class snakeHead
          }else {
              this.snakeBody.unshift(document.querySelector('[posX = "' + this.snakeCoordinates[0] + '"][posY = "1"]'));  //добавляем ячейку X,Y в конце поля в неё class snakeHead
@@ -211,22 +213,21 @@ class Snake extends GameField {
     this.snakeBody.push(document.querySelector('[posX = "' + this.a + '"][posY ="' + this.b +'"]')); //пушим и увеличиваем змею
 
        //считаем результат игры и устанавливаем рекорд, записываем в localstorage
-    gameField.scoreRec;
-    localStorage.getItem('record') > 0 ? gameField.scoreRec = localStorage.getItem('record') : gameField.scoreRec = 0;
+    gameField._scoreRec;
+    localStorage.getItem('record') > 0 ? gameField._scoreRec = localStorage.getItem('record') : gameField._scoreRec = 0;
     //gameField.scoreRec++; // увеличение счёта
-    gameField.scoreSc++; // увеличение счёта
+    gameField._scoreSc++; // увеличение счёта
 
-    if (gameField.scoreSc > localStorage.getItem('record')){
-        gameField.scoreRec++;
-        gameField.scoreRec = gameField.scoreSc;
-        localStorage.setItem('record', gameField.scoreRec);
+    if (gameField._scoreSc > localStorage.getItem('record')){
+        gameField._scoreRec++;
+        gameField._scoreRec = gameField._scoreSc;
+        localStorage.setItem('record', gameField._scoreRec);
     }
 
-    gameField.inputRec.value = `Ваш рекорд: ${gameField.scoreRec}`; // вывод увеличения счёта в input
-    gameField.inputSc.value = `Ваш счёт: ${gameField.scoreSc}`;  // вывод увеличения счёта в input
-   
+    gameField.inputRec.value = `Ваш рекорд: ${gameField._scoreRec}`; // вывод увеличения счёта в input
+    gameField.inputSc.value = `Ваш счёт: ${gameField._scoreSc}`;  // вывод увеличения счёта в input
    }
-         
+
         //игра окончена, змея натыкается на хвост или саму себя
   if(this.snakeBody[0].classList.contains('snakeBody')){ //проверка на содержание class (врезаемся в себя)
    setTimeout(() => {   //timer оповещения
@@ -249,10 +250,9 @@ class Snake extends GameField {
    }
 }
 
-let snake = new Snake();
+let snake = new Snake('right');
 snake.getPosition();
 snake.drow();
-//snake.move();
 snake.initInterval();
 snake.controle();
 
